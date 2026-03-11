@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -7,13 +9,19 @@ public class CallableExample {
 
     static final Map<Integer, Long> cache = new ConcurrentHashMap<>(Map.of(0, 0L, 1, 1L));
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) {
+        List<Future<Long>> futures = new ArrayList<>();
+        List<Integer> fibonacciIndices = List.of(10, 20, 30, 40, 50);
+
         try (ExecutorService threadPool = Executors.newCachedThreadPool()) {
-            Future<Long> fibonacciNumber = threadPool.submit(
-                    () -> fibonacci(30)
-            );
-            final Long l = fibonacciNumber.get();
-            System.out.println("l = " + l);
+            for (int index : fibonacciIndices) {
+                futures.add(threadPool.submit(() -> fibonacci(index)));
+            }
+            for (Future<Long> future : futures) {
+                System.out.println("Fibonacci number: " + future.get());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
 
