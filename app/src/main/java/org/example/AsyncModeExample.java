@@ -6,6 +6,12 @@ import java.util.concurrent.Executors;
 public class AsyncModeExample {
 
     /**
+     *     public static ExecutorService newWorkStealingPool(int parallelism) {
+     *         return new ForkJoinPool
+     *             (parallelism,
+     *              ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+     *              null, true);
+     *     }
      * 가상스레드에서는 비동기 모드가 사용됨
      */
     public static void main(String[] args) {
